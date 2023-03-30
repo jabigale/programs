@@ -1,6 +1,6 @@
 <?php
 
-//get the file and convert everyhthing to variables
+//get the file and convert everything to variables
 //Search by partnumber
 //Search by quicksearch
 //default some values for the sql
