@@ -1,8 +1,19 @@
 <?php
+/*
+**navigation
 //quote to appointment
 //change time
+//deleteappt
+//get vehicle status
+//get display icons
+//submit insert new transaction
+//convert from a quote/invoice to schedule
+//find service bay to displayin
+//display day recap
+//check and verify tires are in stock
 
 //include mysql file
+*/
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
 $currenttitle = "Schedule";
@@ -175,6 +186,7 @@ header($header);
 	
 	if($delete == '1')
 {
+	//deleteappt
 $sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `voiddate`=:voiddate WHERE `id` = :invoiceid');
 $sth1->bindParam(':voiddate',$currentdate);
 $sth1->bindParam(':invoiceid',$transactionid);
@@ -326,6 +338,7 @@ header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
 
 	if($change == '2')
 {
+	//change time
 $newdate = $_GET['newtime'];
 $sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `date`=:newdate,`schedule`=:schedule,`voiddate` = NULL WHERE `id` = :invoiceid');
 $sth1->bindParam(':newdate',$newdate);
@@ -360,7 +373,6 @@ while($checklength >'1')
 		$searchtime = date('Y-m-d H:i:s', strtotime('+1 hour', strtotime($searchtime)));
 	}
 	$sql2 = 'SELECT `id` FROM `'.$locschedule.'` WHERE `date` = \''.$searchtime.'\' AND `schedule` = \''.$schedule.'\' AND `voiddate` IS NULL';
-	//$nRows = $pdocxn->query($sql2)->fetchColumn();
 	$sth2 = $pdocxn->prepare($sql2);
 	$sth2->execute();
 	$nrows = $sth2->rowCount();
@@ -370,7 +382,6 @@ while($checklength >'1')
 		break;
 	}
 	else {
-		//fkmfkmfkmfkm
 		$fillertype = '54';
 $sql2 = 'INSERT INTO `'.$locschedule.'` (`date`,`thread`,`type`,`location`,`invoicedate`,`accountid`,`schedule`) VALUES (:date,:thread,:type,:location,:invoicedate,:accountid,:schedule)';
 $sth2 = $pdocxn->prepare($sql2);
@@ -702,7 +713,7 @@ echo '<a href="vacation.php?adjid='.$vacationid.'" class="daysum-red">'.$employe
 		$align = $row2['align'];
 		$engine = $row2['engine'];
 		
-		//get the icons
+		//get display icons
 	if($brakes == '1')
 	{
 		$brakeicon = "<img src=\"images/icons/schedule/brake_icon.png\" width=\"25\">";
@@ -723,7 +734,7 @@ echo '<a href="vacation.php?adjid='.$vacationid.'" class="daysum-red">'.$employe
 	{	$engineicon = "<img src=\"images/icons/schedule/engine_icon.png\" width=\"25\">";
 	}else{$engineicon = '';}
 		$displayicons = $tireicon.$brakeicon.$oilicon.$shockicon.$alignicon.$engineicon;
-	// get the status
+	//get vehicle status
 		if($currentstatus == '1')
 		{
 			$statuscolor = 'graystatus';
@@ -770,6 +781,7 @@ echo "<a href=\"appointment.php?schedule=1&invoiceid=".$scheduleid."\" target=\"
 	$tr ++;
 	if($nrows == '1')
 	{
+		//find service bay to displayin
 			if($bay1 > '0' && $bay2 > '0')
 		{}else{
 if($change == '1' OR $invtosched == '1')
@@ -838,9 +850,9 @@ else {
 	$bay1 --;
 	$bay2 --;
 	}
+	//display day recap
 	?>
 	</tr></table><br />
-
 <table id="highlightTable" class="blueTable">
 <thead>
 <tr><th colspan="4">Inventory Checklist - Tires going on Today:</th></tr>
@@ -872,7 +884,7 @@ $checkpartid = $row4['partid'];
 $schedqty = $row4['qty'];
 if($checkpartid > '1')
 {
-
+//check and verify tires are in stock
 	$sth1 = $pdocxn->prepare('SELECT * FROM `inventory` WHERE `id` = :cpartid LIMIT 1'); 
 	$sth1->bindParam(':cpartid',$checkpartid);
 	$sth1->execute();
