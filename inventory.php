@@ -1,6 +1,6 @@
 <?php
 
-//get the file and convert everything to variables
+//get the file and convert everyhthing to variables
 //Search by partnumber
 //Search by quicksearch
 //default some values for the sql
@@ -10,6 +10,31 @@
 	//include mysql file
 	include_once ('scripts/mysql.php');
 	include_once ('scripts/global.php');
+	if(!isset($_COOKIE[$cookie1_name])) {
+		$currentid = "0";
+	} else {
+		$currentid = $_COOKIE[$cookie1_name];
+	}
+	if(!isset($_COOKIE[$cookie2_name])) {
+		$currentusername = "None Selected";
+	} else {
+		$currentusername = $_COOKIE[$cookie2_name];
+	}
+	if(!isset($_COOKIE[$cookie3_name])) {
+		$currentlocationid = "0";
+	} else {
+		$currentlocationid = $_COOKIE[$cookie3_name];
+	}
+	if(!isset($_COOKIE[$cookie4_name])) {
+		$currentstorename = "None Selected";
+	} else {
+		$currentstorename = $_COOKIE[$cookie4_name];
+	}
+	if($currentid < '1' or $currentlocationid < '1')
+{
+$header = "Location: index.php";
+header($header);
+}
 	$title = 'Inventory';
 	header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
 	header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
@@ -92,31 +117,6 @@
 	$scheduleid = '0';
 	$schedlink = '';
 	}
-	if(!isset($_COOKIE[$cookie1_name])) {
-		$currentid = "0";
-	} else {
-		$currentid = $_COOKIE[$cookie1_name];
-	}
-	if(!isset($_COOKIE[$cookie2_name])) {
-		$currentusername = "None Selected";
-	} else {
-		$currentusername = $_COOKIE[$cookie2_name];
-	}
-	if(!isset($_COOKIE[$cookie3_name])) {
-		$currentlocationid = "0";
-	} else {
-		$currentlocationid = $_COOKIE[$cookie3_name];
-	}
-	if(!isset($_COOKIE[$cookie4_name])) {
-		$currentstorename = "None Selected";
-	} else {
-		$currentstorename = $_COOKIE[$cookie4_name];
-	}
-	if($currentid < '1' or $currentlocationid < '1')
-{
-$header = "Location: index.php";
-header($header);
-}
 	$selectedquicksearch = '0';
 	$selectedbrand = '0';
 	$selectedpartnumber = '0';
