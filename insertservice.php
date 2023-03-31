@@ -2,6 +2,32 @@
 //include mysql file
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
+//check if logged in
+if(!isset($_COOKIE[$cookie1_name])) {
+	$currentid = "0";
+} else {
+    $currentid = $_COOKIE[$cookie1_name];
+}
+if(!isset($_COOKIE[$cookie2_name])) {
+	$currentusername = "None Selected";
+} else {
+    $currentusername = $_COOKIE[$cookie2_name];
+}
+if(!isset($_COOKIE[$cookie3_name])) {
+	$currentlocationid = "0";
+} else {
+    $currentlocationid = $_COOKIE[$cookie3_name];
+}
+if(!isset($_COOKIE[$cookie4_name])) {
+	$currentstorename = "None Selected";
+} else {
+    $currentstorename = $_COOKIE[$cookie4_name];
+}
+if($currentid < '1' or $currentlocationid < '1')
+{
+$header = "Location: index.php";
+header($header);
+}
 $partid = $_GET['partid'];
 $qty = $_GET['qty'];
 $type = $_GET['type'];
@@ -9,7 +35,6 @@ $acct = $_GET['acct'];
 $inv = $_GET['inv'];
 
 $quicksearch = '0';
-$db = 'realetp3_mtccalendar';
 $sqlcxn = mysql_connect($dbserver, $dbrootuser, $dbrootpass) or die
 ('Error connecting to mysql'. mysql_error());
 mysql_select_db($db,$sqlcxn);
