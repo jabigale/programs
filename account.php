@@ -1,5 +1,6 @@
 <?php
 //include mysql file
+//check if logged in
 //inv_schedule_new
 //search
 //display_customer_vehicles
@@ -46,6 +47,7 @@ if(isset($_GET['vinvoiceid']))
 	$vinvoiceid = '0';
 	$vinvoiceidlink = '';
 }
+//check if logged in
 if(!isset($_COOKIE[$cookie1_name])) {
 	$currentid = "0";
 } else {
