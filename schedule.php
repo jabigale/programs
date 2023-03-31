@@ -18,6 +18,32 @@ include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
 $currenttitle = "Schedule";
 $schedule = '1';
+//check if logged in
+if(!isset($_COOKIE[$cookie1_name])) {
+	$currentid = "0";
+} else {
+    $currentid = $_COOKIE[$cookie1_name];
+}
+if(!isset($_COOKIE[$cookie2_name])) {
+	$currentusername = "None Selected";
+} else {
+    $currentusername = $_COOKIE[$cookie2_name];
+}
+if(!isset($_COOKIE[$cookie3_name])) {
+	$currentlocationid = "0";
+} else {
+    $currentlocationid = $_COOKIE[$cookie3_name];
+}
+if(!isset($_COOKIE[$cookie4_name])) {
+	$currentstorename = "None Selected";
+} else {
+    $currentstorename = $_COOKIE[$cookie4_name];
+}
+if($currentid < '1' or $currentlocationid < '1')
+{
+$header = "Location: index.php";
+header($header);
+}
 date_default_timezone_set('America/Chicago');
 $currentdate = date('Y-m-d');
 $currenthour = date('H');
