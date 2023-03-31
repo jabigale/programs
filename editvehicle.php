@@ -11,38 +11,8 @@ $defaultstate = "WI";
 $yearywi = date('Y', strtotime('+1 Year', strtotime($currentyear)));
 $dbyear = '1965';
 include_once ('scripts/global.php');
-if(isset($_POST['form']))
-{
-setcookie($cookie1_name, $cookie1_value, time() - (3600), "/");
-setcookie($cookie2_name, $cookie2_value, time() - (3600), "/");
-setcookie($cookie3_name, $cookie3_value, time() - (3600), "/");
-setcookie($cookie4_name, $cookie4_value, time() - (3600), "/");
-$userid = $_POST['user'];
-$locationid = $_POST['location'];
-$sth1 = $pdocxn->prepare('SELECT `username` FROM `employees` WHERE `id` = :userid');
-$sth1->bindParam(':userid',$userid);
-$sth1->execute();
-while($row1 = $sth1->fetch(PDO::FETCH_ASSOC))
-{
-$username = $row1['username'];
-}
-$sth2 = $pdocxn->prepare('SELECT `storename` FROM `locations` WHERE `id` = :locationid');
-$sth2->bindParam(':locationid',$locationid);
-$sth2->execute();
-while($row2 = $sth2->fetch(PDO::FETCH_ASSOC))
-{
-$storename = $row2['storename'];
-}
-$cookie1_value = $userid;
-$cookie2_value = $username;
-$cookie3_value = $locationid;
-$cookie4_value = $storename;
-$cookie5_value = $_POST['password'];
-setcookie($cookie1_name, $cookie1_value, time() + (86400 * 30), "/");
-setcookie($cookie2_name, $cookie2_value, time() + (86400 * 30), "/");
-setcookie($cookie3_name, $cookie3_value, time() + (86400 * 30), "/");
-setcookie($cookie4_name, $cookie4_value, time() + (86400 * 30), "/");
-}
+
+//check if logged in
 if(!isset($_COOKIE[$cookie1_name])) {
 	$currentid = "0";
 } else {
@@ -62,6 +32,11 @@ if(!isset($_COOKIE[$cookie4_name])) {
 	$currentstorename = "None Selected";
 } else {
     $currentstorename = $_COOKIE[$cookie4_name];
+}
+if($currentid < '1' or $currentlocationid < '1')
+{
+$header = "Location: index.php";
+header($header);
 }
 if($_POST['editvehicle']&&$_POST['editvehicle']=='1')
 {
