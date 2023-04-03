@@ -1,5 +1,4 @@
 <?php
-
 //get the file and convert everyhthing to variables
 //Search by partnumber
 //Search by quicksearch
@@ -7,41 +6,36 @@
 //Search by brand
 //highlight javascript
 //display tire quotes
-	//include mysql file
-	include_once ('scripts/mysql.php');
-	include_once ('scripts/global.php');
-	if(!isset($_COOKIE[$cookie1_name])) {
-		$currentid = "0";
-	} else {
-		$currentid = $_COOKIE[$cookie1_name];
-	}
-	if(!isset($_COOKIE[$cookie2_name])) {
-		$currentusername = "None Selected";
-	} else {
-		$currentusername = $_COOKIE[$cookie2_name];
-	}
-	if(!isset($_COOKIE[$cookie3_name])) {
-		$currentlocationid = "0";
-	} else {
-		$currentlocationid = $_COOKIE[$cookie3_name];
-	}
-	if(!isset($_COOKIE[$cookie4_name])) {
-		$currentstorename = "None Selected";
-	} else {
-		$currentstorename = $_COOKIE[$cookie4_name];
-	}
-	if($currentid < '1' or $currentlocationid < '1')
+
+//include mysql file
+include_once ('scripts/mysql.php');
+include_once ('scripts/global.php');
+//default page variables
+$title = 'Inventory';
+$linkpage = 'inventory.php';
+$changecustomer = '0';
+$a = '5';
+$b = 'a';
+
+session_start();
+date_default_timezone_set('America/Chicago');
+$currentdate = date('Y-n-j H:i:s');
+header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
+header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
+header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
+header("Pragma: no-cache");
+if(session_status() === PHP_SESSION_ACTIVE && $_SESSION['login'] == '1')
 {
-$header = "Location: index.php";
-header($header);
+	$currentid = $_SESSION[$session1_name];
+	$currentusername = $_SESSION[$session2_name];
+	$currentlocationid = $_SESSION[$session3_name];
+	$currentstorename = $_SESSION[$session4_name];
 }
-	$title = 'Inventory';
-	header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
-	header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
-	header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
-	header("Pragma: no-cache");
-	$a = '5';
-	$b = 'a';
+else{
+	$pagelink = pagenametoid($linkpage);
+	$header = 'Location: index2.php?refpage='.$pagenum.'';
+	header($header);
+}
 	if(isset($_GET['transfer']))
 	{
 	$transfer = '1';
