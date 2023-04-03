@@ -1,21 +1,32 @@
 <?php
 //include mysql file
-//check if logged in
-//inv_schedule_new
-//search
-//display_customer_vehicles
-//displaynosearch
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
+//default page variables
 $title = 'Accounts';
+$linkpage = 'account.php';
+$changecustomer = '0';
+
+session_start();
 date_default_timezone_set('America/Chicago');
 $currentdate = date('Y-n-j H:i:s');
 header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
 header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
 header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
 header("Pragma: no-cache");
-$changecustomer = '0';
-//inv_schedule_new
+if(session_status() === PHP_SESSION_ACTIVE && $_SESSION['login'] == '1')
+{
+	$currentid = $_SESSION[$session1_name];
+	$currentusername = $_SESSION[$session2_name];
+	$currentlocationid = $_SESSION[$session3_name];
+	$currentstorename = $_SESSION[$session4_name];
+}
+else{
+	$pagelink = pagenametoid($linkpage);
+	$header = 'Location: index2.php?refpage='.$pagenum.'';
+	header($header);
+}
+
 if(isset($_GET['invoice']))
 {
 	$newinvoice = $_GET['invoice'];
@@ -47,32 +58,7 @@ if(isset($_GET['vinvoiceid']))
 	$vinvoiceid = '0';
 	$vinvoiceidlink = '';
 }
-//check if logged in
-if(!isset($_COOKIE[$cookie1_name])) {
-	$currentid = "0";
-} else {
-    $currentid = $_COOKIE[$cookie1_name];
-}
-if(!isset($_COOKIE[$cookie2_name])) {
-	$currentusername = "None Selected";
-} else {
-    $currentusername = $_COOKIE[$cookie2_name];
-}
-if(!isset($_COOKIE[$cookie3_name])) {
-	$currentlocationid = "0";
-} else {
-    $currentlocationid = $_COOKIE[$cookie3_name];
-}
-if(!isset($_COOKIE[$cookie4_name])) {
-	$currentstorename = "None Selected";
-} else {
-    $currentstorename = $_COOKIE[$cookie4_name];
-}
-if($currentid < '1' or $currentlocationid < '1')
-{
-$header = "Location: index.php";
-header($header);
-}
+
 if(isset($_GET['invoiceid']))
 {
 $invoiceid = $_GET['invoiceid'];
@@ -99,7 +85,6 @@ else{
 }
 if(isset($_POST['search']))
 {
-	//search
 	//Zero Values Prior
 	$firstname = '0';
 	$lastname='0';
@@ -114,6 +99,7 @@ if(isset($_POST['search']))
 	$accounttype = $_POST['accttype'];
 	$invoiceid = $_POST['invoiceid'];
 	$schedule = $_POST['schedule'];
+//fkmfkm
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -232,6 +218,7 @@ echo "<th>Select Customer</th>";
 }else{
 echo "<th>Begin Conversation</th>";
 }
+//fkmfkmfkm
 ?>
 </tr>
 </thead>
@@ -385,6 +372,7 @@ if($fax > '0')
 		{
 			$dfax = "";
 		}
+		//n2update
 		$dtaxclass = "Consumer";
 		$dlastactivedate = date('m,d,Y',strtotime($lastactivedate));
 		if($address2 > '1')
@@ -460,7 +448,6 @@ if($newinvoice > '0' OR $invoiceid > '0' OR $appointmentid > '0')
 {
 if($schedule > '0')
 	{
-		//display_customer_vehicles
 	${"ip".$tri} .= "Click Vehicle Below to Select</td><td class=\"center\" colspan=\"2\"><form name=\"updatecustomer\" action=\"vehicles.php\" method=\"post\"><input type=\"hidden\" name=\"changecustomer\" value=\"1\"><input type=\"hidden\" name=\"appointmentid\" value=\"".$invoiceid."\"><input type=\"hidden\" name=\"accountid\" value=\"".$accountid."\"><input type=\"submit\" name=\"submit\" class=\"smallbutton\" value=\"Add a Vehicle\" /></form></td></tr>";
 	}else{
 if($appointmentid > '0')
@@ -475,7 +462,7 @@ ${"ip".$tri} .= "Click Vehicle Below to Select</td><td class=\"center\" colspan=
 }}}
 else
 {
-${"ip".$tri} .= "<form name=\"addvehicle\" action=\"vehicles.php\" method=\"POST\"><input type=\"hidden\" name=\"accountid\" value=\"".$accountid."\"><input type=\"submit\" name=\"vehiclelist\" class=\"smallbutton\" value=\"Edit Vehicles\" /></td><td class=\"center\" colspan=\"2\"><input type=\"submit\" name=\"addvehicle\" class=\"smallbutton\" value=\"Add a Vehicle\" /></form></td></tr>";
+${"ip".$tri} .= "<form name=\"addvehicle\" action=\"vehicles.php\" method=\"POST\"><input type=\"hidden\" name=\"accountid\" value=\"".$accountid."\"><input type=\"submit\" name=\"vehiclelist\" class=\"smallbutton\" value=\"Detailed List\" /></td><td class=\"center\" colspan=\"2\"><input type=\"submit\" name=\"addvehicle\" class=\"smallbutton\" value=\"Add a Vehicle\" /></form></td></tr>";
 }
 ${"ip".$tri} .= "<tr><th>Vehicle</th><th>License</th><th>VIN</th></tr>\n";
 $sql2 = 'SELECT `id`,`year`,`model`,`make`,`vin`,`license`,`description`,`active` FROM `vehicles` WHERE `accountid` = :accountid AND `active` = \'1\'';
@@ -606,7 +593,6 @@ $(document).keydown(function (e) {
 <?php
 }
 else {
-	//displaynosearch
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
