@@ -1,0 +1,77 @@
+/* Basic Element Formatting */
+.right{
+left:75%;
+position:fixed;
+    width:25%;
+    height:400px;
+    background-color:#ccc;
+}
+.searchright{
+left:80%;
+position:fixed;
+    width:19%;
+    height:400px;
+}
+.right > div{
+    display:none;   
+}
+#brandstable.td{
+padding: 10px;
+}
+#left{
+width:75%;
+float:left;
+}
+.q1{
+width:49%;
+height:200px;
+float:left;
+border:1px solid black;
+}
+.q2{
+width:49%;
+height:200px;
+float:right;
+border:1px solid black;
+}
+.q3{
+width:49%;
+height:200px;
+float:left;
+border:1px solid black;
+}
+.q4{
+width:49%;
+height:200px;
+float:right;
+border:1px solid black;
+}
+th .pricecontainer {
+    position: relative;
+}
+th .price {
+    display: none;
+    position: absolute;
+    /* More positioning, heigh, width, etc */
+}
+th a:hover .price {
+    display: block;
+}
+.brandstd
+{
+text-align:left;
+padding:3px;
+}
+.affiliatebrandstd
+{
+text-align:left;
+padding:3px;
+}
+#alltd
+{
+text-align:left;
+}
+.affiliatechecktd
+{
+text-align:left;
+}

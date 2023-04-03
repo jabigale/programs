@@ -1,0 +1,63 @@
+/* Basic Element Formatting */
+table{
+	margin:auto;
+}
+td{
+		text-align:left;
+		padding:25px;
+	}
+th{
+		text-align:left;
+		padding:7px;
+	}
+table{
+	margin:auto;
+}
+table.stdtable td{
+		text-align:left;
+		padding:5px;
+	}
+th{
+		text-align:left;
+		padding:7px;
+	}
+.right{
+left:75%;
+position:fixed;
+    width:25%;
+    height:400px;
+    background-color:#ccc;
+}
+.right > div{
+    display:none;   
+}
+.q1{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q2{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+.q3{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q4{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+.year {
+  box-sizing: border-box;
+  width: 25%;
+  padding-right: 20px;
+  float: left;
+}

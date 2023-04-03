@@ -1,0 +1,52 @@
+/* Basic Element Formatting */
+.right{
+left:56%;
+position:fixed;
+    width:44%;
+    height:600px;
+    background-color:#ccc;
+}
+#left{
+width:55%;
+float:left;
+}
+.q1{
+width:100%;
+max-height:175px;
+float:left;
+border:1px solid black;
+font-size: 13px;
+}
+.q3{
+width:100%;
+max-height:375px;
+float:left;
+border:1px solid black;
+overflow-y: scroll; 
+}
+.q3 > div{
+    display:none;   
+}
+
+/* Basic Element Formatting */
+.right10{
+    left:76%;
+    position:fixed;
+        width:20%;
+        height:600px;
+        background-color:#ccc;
+    }
+    #left10{
+    width:75%;
+    float:left;
+    }
+    .q310{
+    width:100%;
+    max-height:375px;
+    float:left;
+    border:1px solid black;
+    overflow-y: scroll; 
+    }
+    .right10 > div{
+        display:none;   
+    }

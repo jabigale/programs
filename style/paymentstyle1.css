@@ -1,0 +1,26 @@
+/* Basic Element Formatting */
+.right{
+left:56%;
+position:fixed;
+    width:44%;
+    height:600px;
+    background-color:#ccc;
+}
+#left{
+width:55%;
+float:left;
+}
+.q1{
+width:100%;
+float:left;
+max-height:175px;
+border:1px solid black;
+font-size: 13px;
+}
+.q3{
+width:100%;
+max-height:450px;
+float:left;
+border:1px solid black;
+overflow-y: scroll;
+}

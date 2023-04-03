@@ -1,0 +1,44 @@
+/* Basic Element Formatting */
+.right{
+left:75%;
+position:fixed;
+    width:25%;
+    height:400px;
+    background-color:#ccc;
+}
+.content{
+padding-top:100px;
+}
+.right > div{
+    display:none;   
+}
+.q1{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q2{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+.q3{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q4{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+table.searchtable td, table.searchtable th {
+  padding: 3px 2px;
+}
+input[type=number]{
+    width: 50px;
+}

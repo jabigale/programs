@@ -1,0 +1,57 @@
+/* Basic Element Formatting */
+.right{
+left:70%;
+position:fixed;
+    width:30%;
+    height:225px;
+    background-color:#ccc;
+z-index:1000;
+}
+.right1{
+left:65%;
+position:fixed;
+    width:35%;
+    height:225px;
+    background-color:#fff;
+z-index:1000;
+}
+.printdiv{
+left:70%;
+padding-top:230px;
+position:fixed;
+    width:30%;
+    height:400px;
+    background-color:#ccc;
+z-index:1;
+}
+.right > div{
+    display:none;   
+}
+#left{
+width:70%;
+float:left;
+}
+#left1{
+width:65%;
+float:left;
+}
+.q1{
+width:100%;
+height:150px;
+float:left;
+border:1px solid black;
+}
+.q3{
+width:100%;
+height:80px;
+float:left;
+border:1px solid black;
+}
+.q4{
+left:70%;
+position:fixed;
+top:300px;
+    width:30%;
+    height:150px;
+    background-color:#fff;
+}

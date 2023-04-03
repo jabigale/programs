@@ -1,0 +1,15 @@
+/* Basic Element Formatting */
+#right{
+left:50%;
+position:fixed;
+    width:50%;
+    height:400px;
+    background-color:ccc;
+}
+#left{
+width:50%;
+float:left;
+}
+#content{
+padding-top: 70px;
+}

@@ -1,0 +1,7 @@
+table.paymenttable {
+  width: 50%;
+}
+table.paymenttable td, table.paymenttable th {
+  padding: 7px 2px;
+text-align:center;
+}

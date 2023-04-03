@@ -1,0 +1,12 @@
+/* Basic Element Formatting */
+#left{
+width:100%;
+float:left;
+}
+#content{
+	padding-top:75px;
+}
+.graystatus {
+	background: linear-gradient(to bottom, #dfdfdf 0%, #8D8D8D 100%);
+		border: 1px solid #999999;
+	}

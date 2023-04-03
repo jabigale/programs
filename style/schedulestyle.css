@@ -1,0 +1,198 @@
+/* Basic Element Formatting */
+.right{
+left:75%;
+position:fixed;
+    width:25%;
+    height:400px;
+    background-color:#ccc;
+}
+.right > div{
+    display:none;   
+}
+#floatleft{
+float:left;
+}
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+.q1{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q2{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+.q3{
+width:49%;
+height:100px;
+float:left;
+border:1px solid black;
+}
+.q4{
+width:49%;
+height:100px;
+float:right;
+border:1px solid black;
+}
+.year {
+  box-sizing: border-box;
+  width: 25%;
+  padding-right: 20px;
+  float: left;
+}
+#content{
+padding-top: 70px;
+}
+#navigation {
+top: 0;
+width: 100%;
+background color: #cccccc
+color: black;
+height: 22px;
+margin-left:auto;
+margin-right:auto;
+text-align: center;
+padding-top: 4px;
+/* Adds shadow to the bottom of the bar */
+-webkit-box-shadow: 0px 0px 8px 0px #000000;
+-moz-box-shadow: 0px 0px 8px 0px #000000;
+box-shadow: 0px 0px 8px 0px #000000;
+/* Adds the transparent background */
+background-color: rgba(1, 1, 1, 0.8);
+color: rgba(1, 1, 1, 0.8);
+} #navigation a {
+font-size: 18px;
+padding-left: 15px;
+padding-right: 15px;
+color: White;
+text-decoration: none;
+}
+
+ #navigation a:hover {
+color: gray;
+}
+.bluestatus {
+background: linear-gradient(to bottom, #336699 0%, #003366 100%);
+}
+.yellowstatus {
+background: linear-gradient(to bottom, #ffcc00 0%, #cc9900 100%);
+}
+.redstatus {
+background: linear-gradient(to bottom, #ff0000 0%, #aa0000 100%);
+}
+.bluestatus {
+  background: linear-gradient(to bottom, #0061ff 0%, #034bc1 100%);
+  }
+
+.orangestatus {
+background: linear-gradient(to bottom, #ff3300 0%, #cc3300 100%);
+}
+.lightgreenstatus {
+background: linear-gradient(to bottom, #00ff00 0%, #009933 100%);
+}
+.greenstatus {
+background: linear-gradient(to bottom, #006600 0%, #003300 100%);
+}
+.graystatus {
+background: linear-gradient(to bottom, #dfdfdf 0%, #8D8D8D 100%);
+	border: 1px solid #999999;
+}
+.whitestatus {
+background: linear-gradient(to bottom, #ffffff 0%, #cccccc 100%);
+}
+.blackstatus {
+background: linear-gradient(to bottom, #555555 0%, #000000 100%);
+}
+.btn-link{
+  border:none;
+  outline:none;
+  background:none;
+  cursor:pointer;
+  color:#0000EE;
+  padding:0;
+  text-decoration:underline;
+  font-family:inherit;
+  font-size:13px;
+}
+.btn-link:active{
+  color:#FF0000;
+}
+.btn-link-big{
+  border:none;
+  outline:none;
+  background:none;
+  cursor:pointer;
+  color:#0000EE;
+  padding:0;
+  text-decoration:underline;
+  font-family:inherit;
+  font-size:22px;
+font-weight:bold;
+}
+.btn-link-big:active{
+  color:#FF0000;
+}
+table.gradienttable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #999999;
+	border-collapse: collapse;
+	width: 98%;
+	margin-left:1%;
+	margin-right:auto;
+	text-align: center;
+}
+table.gradienttable td {
+	padding: 0px;
+	background: #8fbcff;
+	background: -moz-linear-gradient(top,  #8fbcff 0%, #8fbcff 40%, #0066ff 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8fbcff), color-stop(40%,#8fbcff), color-stop(100%,#0066ff));
+	background: -webkit-linear-gradient(top,  #8fbcff 0%,#8fbcff 40%,#0066ff 100%);
+	background: -o-linear-gradient(top,  #8fbcff 0%,#8fbcff 40%,#0066ff 100%);
+	background: -ms-linear-gradient(top,  #8fbcff 0%,#8fbcff 40%,#0066ff 100%);
+	background: linear-gradient(to bottom,  #8fbcff 0%,#8fbcff 40%,#0066ff 100%);
+	border: 1px solid #999999;
+}
+	.highlight{background: #C0C0C0;}
+table.gradienttable th p{
+	margin:0px;
+	padding:8px;
+	border-top: 1px solid #bfbfbf;
+	border-bottom:0px;
+	border-left: 1px solid #bfbfbf;
+	border-right:0px;
+}
+table.gradienttable td p{
+	margin:0px;
+	padding:8px;
+	border-top: 1px solid #ffffff;
+	border-bottom:0px;
+	border-left: 1px solid #8fbcff;;
+	border-right:0px;
+}
+a.daysum {
+    text-decoration: none;
+    font-size: 16px;
+    color: #0000ff;
+}
+a.daysum-red {
+    text-decoration: none;
+    font-size: 16px;
+    color: #ff0000;
+}
+a.daysum-black {
+    text-decoration: none;
+    font-size: 14px;
+    color: #000000;
+}

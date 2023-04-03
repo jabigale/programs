@@ -1,0 +1,152 @@
+/* Styles go here */
+.page-header, .page-header-space {
+  height: 100px;
+  width: 100%;
+}
+.page-footer, .page-footer-space {
+  height: 50px;
+}
+.page-footer {
+  position: fixed;
+  bottom: 0mm;
+  width: 100%;
+  font-size:12px;
+  border-top: 1px solid black; /* for demo */
+  background: rgb(255, 255, 255); /* for demo */
+}
+.page-header {
+  position: fixed;
+  top: 0mm;
+  width: 100%;
+  border-bottom: 1px solid black; /* for demo */
+  background: rgb(255, 255, 255); /* for demo */
+}
+.page {
+  page-break-after: always;
+}
+@page {
+  margin: 20mm
+}
+@media print {
+   thead {display: table-header-group;} 
+   tfoot {display: table-footer-group;}
+   body {margin: 0;}
+}
+    .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+    }
+    .td #left {
+        text-align: left;
+    }
+    .invoice-box table td {
+        padding: 1px;
+        vertical-align: top;
+    }
+    .left{
+        text-align: left;
+    }
+    .right{
+    	text-align: right;
+        border-right: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
+    .center{
+    	text-align: center;
+        border-right: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
+.bold{
+        font-weight: bold;
+}
+.boldright{
+text-align: right;
+font-weight: bold;
+}
+    .invoice-box table tr.top table td {
+        padding-bottom: 5px;
+    }
+    .invoice-box table tr.top table td.title {
+        font-size: 16px;
+        color: #333;
+    }
+    .infotable{
+        width:100%;
+    }
+    .infotable2{
+        width:100%;
+        border-bottom:1px solid #000000;
+        padding:0;
+    }
+    .title2 {
+        width:100%;
+        font-size: 20px;
+        color: #333;
+        text-align:center;
+        font-weight:bold;
+    }
+    .title3 {
+        width:100%;
+        font-size: 14px;
+        color: #333;
+        text-align:center;
+        font-weight:bold;
+    }
+    .invoice-box table tr.information table td {
+        padding-bottom: 5px;
+    }
+    .invoice-box table tr.heading td {
+        background: rgb(184, 184, 184);
+        border-bottom: 2px solid #000;
+        border-right: 1px solid #ddd;
+        font-weight: bold;
+    }
+    tr.heading td{
+        background: rgb(184, 184, 184);
+        border-bottom: 2px solid #000;
+        border-right: 1px solid #ddd;
+        font-weight: bold;
+    }
+    .invoice-box table tr.details td {
+        padding-bottom: 5px;
+    }
+    .invoice-box table tr.item td{
+        border-bottom: 1px solid #000;
+    }
+    .invoice-box table tr.item.last td {
+        border-bottom: none;
+    }
+    .invoice-box table tr.total td:nth-child(2) {
+        border-top: 0px;
+    }
+.tdborder{
+border: 2px solid #333;
+}
+.notesborder{
+border-bottom: 2px solid #333;
+border-left: 2px solid #333;
+border-right: 2px solid #333;
+}
+.tdborderright{
+border: 2px solid #333;
+text-align: right;
+}
+    /** RTL **/
+    .rtl {
+        direction: rtl;
+        font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+    }
+    .rtl table {
+        text-align: right;
+    }
+    .rtl table tr td:nth-child(2) {
+        text-align: left;
+    }
+    .inpsecttable{
+        border-top: 2px;
+        width:100%;
+    }
+    tr.inpsecttabletr td{
+        border-bottom: 1px dashed rgb(153, 153, 153);
+    }

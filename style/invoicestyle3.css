@@ -1,0 +1,95 @@
+/* Basic Element Formatting */
+.right{
+left:60%;
+position:fixed;
+width:40%;
+height:175px;
+background-color:#ccc;
+z-index:1000;
+}
+.right1{
+left:60%;
+position:fixed;
+width:40%;
+height:125px;
+background-color:#fff;
+z-index:1000;
+}
+.printdiv{
+left:60%;
+padding-top:180px;
+position:fixed;
+width:40%;
+height:500px;
+background-color:#ccc;
+z-index:1;
+}
+.right > div{
+    display:none;   
+}
+#left{
+padding:5px;
+width:60%;
+float:left;
+}
+#left1{
+width:60%;
+float:left;
+}
+.q1{
+width:100%;
+height:175px;
+float:left;
+border:1px solid black;
+}
+.q3{
+width:100%;
+height:30px;
+float:left;
+background-color:#ccc;
+}
+.q4{
+left:60%;
+position:fixed;
+top:300px;
+    width:40%;
+    height:150px;
+    background-color:#fff;
+}
+.table-dragable > tbody .grabable { cursor: grab; user-select: none }
+.table-dragable > tbody > tr.grabbed {
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.5);
+}
+.table-dragable > tbody > tr.grabbed:active {
+  user-input: none;
+}
+.table-dragable > tbody > tr.grabbed:active * {
+  user-input: none;
+  cursor: grab !important;
+}
+.box
+{
+ width:70px;
+ padding:10px;
+ background-color:#fff;
+ border:1px solid #ccc;
+ border-radius:5px;
+ margin-top:25px;
+}
+#page_list li
+{
+ padding:0px;
+ background-color:#f9f9f9;
+ border:1px dotted #ccc;
+ cursor:grab;
+ margin-top:5px;
+}
+#page_list li.ui-state-highlight
+{
+ padding:10px;
+ background-color:#ffffcc;
+ border:1px dotted #ccc;
+ cursor:grab;
+ margin-top:5px;
+}
+.list-unstyled{padding-left:0;list-style:none}
