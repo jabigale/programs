@@ -74,6 +74,15 @@ $accountid
  * 
 */
 //include mysql file
+
+<?php
+//include mysql file
+include_once ('scripts/mysql.php');
+include_once ('scripts/global.php');
+//default page variables
+$title = 'Invoice';
+$linkpage = 'invoice.php';
+$changecustomer = '0';
 $pagelink2 = 'invoice2.php';
 $dbyear = '1965';
 $pagelink = 'invoice.php';
@@ -81,50 +90,38 @@ $invtable = 'invoice';
 $invlinetable ='line_items';
 $currentyear = date('Y');
 $yearywi = date('Y', strtotime('+1 Year', strtotime($currentyear)));
-
-include_once ('scripts/mysql.php');
-include_once ('scripts/global.php');
-date_default_timezone_set('America/Chicago');
-header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
-header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
-header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
-header("Pragma: no-cache");
-//some default values
 $sort = '0';
 $split = '0';
 $currentdate = date('Y-n-j H:i:s');
 $currentday = date('Y-n-j');
 $currentday2 = date('Y-m-d');
 $quicksearch = '0';
-$db = 'realetp3_mtccalendar';
 $invoicesubtotal = '0';
 $accountid = '0';
 $changetax = '0';
+
+session_start();
+date_default_timezone_set('America/Chicago');
+$currentdate = date('Y-n-j H:i:s');
+header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
+header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
+header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
+header("Pragma: no-cache");
+
 //check if logged in
-if(!isset($_COOKIE[$cookie1_name])) {	$currentid = "0";
-} else {
-    $currentid = $_COOKIE[$cookie1_name];
-}
-if(!isset($_COOKIE[$cookie2_name])) {
-	$currentusername = "None Selected";
-} else {
-    $currentusername = $_COOKIE[$cookie2_name];
-}
-if(!isset($_COOKIE[$cookie3_name])) {
-	$currentlocationid = "0";
-} else {
-    $currentlocationid = $_COOKIE[$cookie3_name];
-}
-if(!isset($_COOKIE[$cookie4_name])) {
-	$currentstorename = "None Selected";
-} else {
-    $currentstorename = $_COOKIE[$cookie4_name];
-}
-if($currentid < '1' or $currentlocationid < '1')
+if(session_status() === PHP_SESSION_ACTIVE && $_SESSION['login'] == '1')
 {
-$header = "Location: index.php";
-header($header);
+	$currentid = $_SESSION[$session1_name];
+	$currentusername = $_SESSION[$session2_name];
+	$currentlocationid = $_SESSION[$session3_name];
+	$currentstorename = $_SESSION[$session4_name];
 }
+else{
+	$pagelink = pagenametoid($linkpage);
+	$header = 'Location: index2.php?refpage='.$pagenum.'';
+	header($header);
+}
+
 if(isset($_POST['sort']))
 {
 $sort = $_POST['sort'];
