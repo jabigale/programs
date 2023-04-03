@@ -3,7 +3,7 @@
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
 //default page variables
-$title = 'Accounts';
+$title = 'Edit Vehicle';
 $linkpage = 'editvehicle.php';
 $changecustomer = '0';
 $defaultstate = "WI";
