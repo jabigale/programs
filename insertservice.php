@@ -4,7 +4,7 @@
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
 //default page variables
-$title = 'Accounts';
+$title = 'Insert Service';
 $linkpage = 'editvehicle.php';
 $changecustomer = '0';
 $defaultstate = "WI";
