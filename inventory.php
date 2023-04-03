@@ -1,5 +1,5 @@
 <?php
-//get the file and convert everyhthing to variables
+//get the file and convert everything to variables
 //Search by partnumber
 //Search by quicksearch
 //default some values for the sql
@@ -1190,7 +1190,7 @@ echo "<td>$partnumber</td><td>$size</td><td>$ply</td><td>$brand</td><td>$model</
 	$sth2->bindParam(':location',$location);
 	$sth2->bindParam(':amount',$amount);
 	$sth2->execute();
-	//get the file and convert everyhthing to variables
+	//get the file and convert everything to variables
 
 
 	if(isset($_POST["importnewinventory"])){
