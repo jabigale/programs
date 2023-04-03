@@ -1,43 +1,45 @@
+
 <?php
 //include mysql file
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
-//check if logged in
-if(!isset($_COOKIE[$cookie1_name])) {
-	$currentid = "0";
-} else {
-    $currentid = $_COOKIE[$cookie1_name];
-}
-if(!isset($_COOKIE[$cookie2_name])) {
-	$currentusername = "None Selected";
-} else {
-    $currentusername = $_COOKIE[$cookie2_name];
-}
-if(!isset($_COOKIE[$cookie3_name])) {
-	$currentlocationid = "0";
-} else {
-    $currentlocationid = $_COOKIE[$cookie3_name];
-}
-if(!isset($_COOKIE[$cookie4_name])) {
-	$currentstorename = "None Selected";
-} else {
-    $currentstorename = $_COOKIE[$cookie4_name];
-}
-if($currentid < '1' or $currentlocationid < '1')
-{
-$header = "Location: index.php";
-header($header);
-}
+//default page variables
+$title = 'Accounts';
+$linkpage = 'editvehicle.php';
+$changecustomer = '0';
+$defaultstate = "WI";
+$yearywi = date('Y', strtotime('+1 Year', strtotime($currentyear)));
+$dbyear = '1965';
 $partid = $_GET['partid'];
 $qty = $_GET['qty'];
 $type = $_GET['type'];
 $acct = $_GET['acct'];
 $inv = $_GET['inv'];
-
 $quicksearch = '0';
-$sqlcxn = mysql_connect($dbserver, $dbrootuser, $dbrootpass) or die
-('Error connecting to mysql'. mysql_error());
-mysql_select_db($db,$sqlcxn);
+
+session_start();
+date_default_timezone_set('America/Chicago');
+$currentdate = date('Y-n-j H:i:s');
+$currentday = date('Y-n-j');
+header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
+header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
+header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
+header("Pragma: no-cache");
+
+//check if logged in
+if(session_status() === PHP_SESSION_ACTIVE && $_SESSION['login'] == '1')
+{
+	$currentid = $_SESSION[$session1_name];
+	$currentusername = $_SESSION[$session2_name];
+	$currentlocationid = $_SESSION[$session3_name];
+	$currentstorename = $_SESSION[$session4_name];
+}
+else{
+	$pagelink = pagenametoid($linkpage);
+	$header = 'Location: index2.php?refpage='.$pagenum.'';
+	header($header);
+}
+
 if(isset($_POST['newservice']))
 {
 $newcost1 = $_POST['newprice1'];
