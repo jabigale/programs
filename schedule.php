@@ -1,53 +1,37 @@
 <?php
 /*
-**navigation
 //quote to appointment
 //change time
-//deleteappt
-//get vehicle status
-//get display icons
-//submit insert new transaction
-//convert from a quote/invoice to schedule
-//find service bay to displayin
-//display day recap
-//check and verify tires are in stock
 
-//include mysql file
+Tables used in this file
+	accounts
+	employees
+	locations
+	$locschedule
+	invoice
+	vehicles
+	line_items
+	$lischedule
+	ptoschedule
+	schedule1hours
+	$invlinetable
+	inventory
+
 */
-
-<?php
 //include mysql file
+if(isset($_SERVER['HTTP_REFERER'])) {
+$lastpage = $_SERVER['HTTP_REFERER'];
+}else{
+    $lastpage = '#';
+}
 include_once ('scripts/mysql.php');
 include_once ('scripts/global.php');
-//default page variables
-$title = 'Schedule';
-$linkpage = 'schedule.php';
-$changecustomer = '0';
+$currenttitle = "Schedule";
 $schedule = '1';
-
-session_start();
 date_default_timezone_set('America/Chicago');
-$currentdate = date('Y-n-j H:i:s');
 $currentdate = date('Y-m-d');
 $currenthour = date('H');
 $currentminute = date('i');
-header("Expires: Mon, 01 Jan 2018 05:00:00 GMT");
-header("Last-Modified: ".gmdate( 'D, d M Y H:i:s')." GMT");
-header("Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0");
-header("Pragma: no-cache");
-if(session_status() === PHP_SESSION_ACTIVE && $_SESSION['login'] == '1')
-{
-	$currentid = $_SESSION[$session1_name];
-	$currentusername = $_SESSION[$session2_name];
-	$currentlocationid = $_SESSION[$session3_name];
-	$currentstorename = $_SESSION[$session4_name];
-}
-else{
-	$pagelink = pagenametoid($linkpage);
-	$header = 'Location: index2.php?refpage='.$pagenum.'';
-	header($header);
-}
-
 	if(isset($_GET['id']))
 	{
 	$transactionid = $_GET['id'];
@@ -77,26 +61,23 @@ $displaychange2 = '';
 }
 if(isset($_GET['delete']))
 {
-$delete = $_GET['delete'];
-	}
-	else{
+	$delete = $_GET['delete'];
+}else{
 	$delete = '0';
-	}
-	if(isset($_GET['accountid']))
-	{
+}
+if(isset($_GET['accountid']))
+{
 	$accountid = $_GET['accountid'];
 	$accountinput = '<input type="hidden" name="accountid" value="'.$accountid.'">';
-	}
-	else{
+}else{
 	$accountid = '';
 	$accountinput = '';
-	}
+}
 	if(isset($_GET['selectedday']))
 	{
-	$selectedday = $_GET['selectedday'];
-	}
-	else{
-	$selectedday = date('Y-m-d');
+		$selectedday = $_GET['selectedday'];
+	}else{
+		$selectedday = date('Y-m-d');
 	}
 	if(isset($_GET['lc']))
 	{
@@ -106,14 +87,14 @@ $delete = $_GET['delete'];
 	if($accountid > '0')
 	{
 		$sql1 = 'SELECT `lastname`,`firstname` FROM `accounts` WHERE `accountid` = :accountid';
-	$sth1 = $pdocxn->prepare($sql1);
-	$sth1->bindParam(':accountid',$accountid);
-	$sth1->execute();
+		$sth1 = $pdocxn->prepare($sql1);
+		$sth1->bindParam(':accountid',$accountid);
+		$sth1->execute();
 		while($row1 = $sth1->fetch(PDO::FETCH_ASSOC))
 		{
-		$lastname = $row1['lastname'];
-		$firstname = $row1['firstname'];
-		$customername = $firstname." ".$lastname;
+			$lastname = $row1['lastname'];
+			$firstname = $row1['firstname'];
+			$customername = $firstname." ".$lastname;
 		}
 	}else{
 		$customername = "";
@@ -132,7 +113,6 @@ $delete = $_GET['delete'];
 	$prevday3 = date('Y-m-d', strtotime('-3 day', strtotime($selectedday)));
 	$prevday3a = date('D', strtotime('-3 day', strtotime($selectedday)));
 	$prevday3b = date('jS', strtotime('-3 day', strtotime($selectedday)));
-	
 	$nextday1 = date('Y-m-d', strtotime('+1 day', strtotime($selectedday)));
 	$nextday1a = date('D', strtotime('+1 day', strtotime($selectedday)));
 	$nextday1b = date('jS', strtotime('+1 day', strtotime($selectedday)));
@@ -212,261 +192,243 @@ header($header);
 	
 	if($delete == '1')
 {
-	//deleteappt
-$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `voiddate`=:voiddate WHERE `id` = :invoiceid');
-$sth1->bindParam(':voiddate',$currentdate);
-$sth1->bindParam(':invoiceid',$transactionid);
-$sth1->execute();
-$sth2 = $pdocxn->prepare('DELETE FROM `'.$locschedule.'` WHERE `thread` = :inv');
-$sth2->bindParam(':inv',$transactionid);
-$sth2->execute();
-header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
-	}
+	$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `voiddate`=:voiddate WHERE `id` = :invoiceid');
+	$sth1->bindParam(':voiddate',$currentdate);
+	$sth1->bindParam(':invoiceid',$transactionid);
+	$sth1->execute();
+	$sth2 = $pdocxn->prepare('DELETE FROM `'.$locschedule.'` WHERE `thread` = :inv');
+	$sth2->bindParam(':inv',$transactionid);
+	$sth2->execute();
+	header('location:schedule.php?r='.$r.'');
+}
 
 
 if($invtosched == '2')
 {
-$newdate = $_GET['newtime'];
-	//submit insert new transaction
+//submit insert new transaction
+	$newdate = $_GET['newtime'];
+	$sth3 = $pdocxn->prepare('SELECT * FROM `invoice` WHERE id = :inv');
+	$sth3->bindParam(':inv',$invoiceid);
+	$sth3->execute();
+	$row3 = $sth3->fetch(PDO::FETCH_ASSOC);
 
-$sth3 = $pdocxn->prepare('SELECT * FROM `invoice` WHERE id = :inv');
-$sth3->bindParam(':inv',$invoiceid);
-$sth3->execute();
-$row3 = $sth3->fetch(PDO::FETCH_ASSOC);
+	$accountid = $row3['accountid'];
+	$invuserid = $row3['userid'];
+	$vehicleid = $row3['vehicleid'];
+	$mileagein = $row3['mileagein'];
+	$mileageout = $row3['mileageout'];
+	$location = $row3['location'];
+	$taxgroup = $row3['taxgroup'];
+	//convert from a quote/invoice to schedule
+	$sth1 = $pdocxn->prepare('SELECT `id` FROM `'.$locschedule.'` ORDER BY `id` DESC LIMIT 1');
+	$sth1->execute()or die(print_r($sth1->errorInfo(), true));
+	$row1 = $sth1->fetch(PDO::FETCH_ASSOC);
+	$lastinvid = $row1['id'];
+	$scheduleid = $lastinvid + '1';
 
-$accountid = $row3['accountid'];
-$invuserid = $row3['userid'];
-$vehicleid = $row3['vehicleid'];
-$mileagein = $row3['mileagein'];
-$mileageout = $row3['mileageout'];
-$location = $row3['location'];
-$taxgroup = $row3['taxgroup'];
-//convert from a quote/invoice to schedule
-$sth1 = $pdocxn->prepare('SELECT `id` FROM `'.$locschedule.'` ORDER BY `id` DESC LIMIT 1');
-$sth1->execute()or die(print_r($sth1->errorInfo(), true));
-$row1 = $sth1->fetch(PDO::FETCH_ASSOC);
-$lastinvid = $row1['id'];
-$scheduleid = $lastinvid + '1';
+	$typeid = '51';
+	$length = '1';
+	$getname = $pdocxn->prepare('SELECT `firstname`,`lastname`,`fullname`,`taxclass` from `accounts` WHERE `accountid` = :accountid');
+	$getname->bindParam(':accountid',$accountid);
+	$getname->execute();
+	while($getnamerow = $getname->fetch(PDO::FETCH_ASSOC))
+	{
+		$databasefname = $getnamerow['firstname'];
+		$firstname = stripslashes($databasefname);
+		$databaselname = $getnamerow['lastname'];
+		$lastname = stripslashes($databaselname);
+		$databasefullname = $getnamerow['fullname'];
+		$fullname = stripslashes($databasefullname);
+		$taxclass = $getnamerow['taxclass'];
+		if($firstname > '0')
+		{
+		$abvname = $firstname." ".$lastname;
+		}
+	}
+	if($vehicleid > '0')
+	{
+		$getvehicle = $pdocxn->prepare('SELECT `year`,`make`,`model`,`description`,`cfdescription` from `vehicles` WHERE `id` = :vehicleid');
+		$getvehicle->bindParam(':vehicleid',$vehicleid);
+		$getvehicle->execute();
+		while($getvehiclerow = $getvehicle->fetch(PDO::FETCH_ASSOC))
+		{
+			$year = $getvehiclerow['year'];
+			$make = $getvehiclerow['make'];
+			$model = $getvehiclerow['model'];
+			if($year > '0')
+			{
+				$abvvehicle = $year." ".$make." ".$model;
+			}else{
+				$abvvehicle = $getvehiclerow['description'];
+			}
+			if($abvvehicle < '1')
+			{
+			$abvvehicle = $getvehiclerow['cfdescription'];
+		}}
+	}
+	else{
+		$abvvehicle = '';
+	}
 
-$typeid = '51';
-$length = '1';
+	$sth2 = $pdocxn->prepare('INSERT INTO `'.$locschedule.'`(`id`,`date`,`userid`,`type`,`location`,`creationdate`,`invoicedate`,`taxgroup`,`accountid`,`vehicleid`,`mileagein`,`mileageout`,`length`,`abvname`,`abvvehicle`,`schedule`) VALUES (:id,:date,:userid,:typeid,:location,:creationdate,:invoicedate,:taxgroup,:accountid,:vehicleid,:mileagein,:mileageout,:length,:abvname,:abvvehicle,:schedule)');
+	$sth2->bindParam(':id',$scheduleid);
+	$sth2->bindParam(':date',$newdate);
+	$sth2->bindParam(':userid',$currentid);
+	$sth2->bindParam(':typeid',$typeid);
+	$sth2->bindParam(':location',$location);
+	$sth2->bindParam(':creationdate',$currentdate);
+	$sth2->bindParam(':invoicedate',$newdate);
+	$sth2->bindParam(':taxgroup',$taxgroup);
+	$sth2->bindParam(':accountid',$accountid);
+	$sth2->bindParam(':vehicleid',$vehicleid);
+	$sth2->bindParam(':mileagein',$mileagein);
+	$sth2->bindParam(':mileageout',$mileageout);
+	$sth2->bindParam(':length',$length);
+	$sth2->bindParam(':abvname',$abvname);
+	$sth2->bindParam(':abvvehicle',$abvvehicle);
+	$sth2->bindParam(':schedule',$schedule);
+	$sth2->execute()or die(print_r($sth2->errorInfo(), true));
+	$sth4 = $pdocxn->prepare('SELECT * FROM `line_items` WHERE `invoiceid` = :inv ORDER BY `linenumber` ASC');
+	$sth4->bindParam(':inv',$invoiceid);
+	$sth4->execute()or die(print_r($sth4->errorInfo(), true));
+	$linecount = $sth4->rowCount();
+		while($row4 = $sth4->fetch(PDO::FETCH_ASSOC))
+	{
+		$lineitemtype = $row4['lineitem_typeid'];
+		$lineid = $row4['id'];
+		$invqty = $row4['qty'];
+		$invamount = $row4['amount'];
+		$invpartid = $row4['partid'];
+		$invpackageid = $row4['packageid'];
+		$invserviceid = $row4['serviceid'];
+		$databasecomment = $row4['comment'];
+		$fet = $row4['fet'];
+		$extprice = $row4['totallineamount'];
+		$linenumber = $row4['linenumber'];
+		$lineitem_subtypeid = $row4['lineitem_subtypeid'];
+		$lineitem_saletype = $row4['lineitem_saletype'];
 
-
-$getname = $pdocxn->prepare('SELECT `firstname`,`lastname`,`fullname`,`taxclass` from `accounts` WHERE `accountid` = :accountid');
-$getname->bindParam(':accountid',$accountid);
-$getname->execute();
-while($getnamerow = $getname->fetch(PDO::FETCH_ASSOC))
-{
-$databasefname = $getnamerow['firstname'];
-$firstname = stripslashes($databasefname);
-$databaselname = $getnamerow['lastname'];
-$lastname = stripslashes($databaselname);
-$databasefullname = $getnamerow['fullname'];
-$fullname = stripslashes($databasefullname);
-$taxclass = $getnamerow['taxclass'];
-if($firstname > '0')
-{
-$abvname = $firstname." ".$lastname;
+		$copysql = 'INSERT INTO `'.$lischedule.'`(`invoiceid`,`linenumber`,`qty`,`amount`,`partid`,`packageid`,`serviceid`,`comment`,`fet`,`totallineamount`,`lineitem_typeid`,`lineitem_subtypeid`,`lineitem_saletype`,`hours`,`basecost`) VALUES (:invoiceid,:linenumber,:qty,:amount,:partid,:packageid,:serviceid,:comment,:fet,:totallineamount,:lineitem_typeid,:lineitem_subtypeid,:lineitem_saletype,:hours,:basecost)';
+		$copysth = $pdocxn->prepare($copysql);
+		$copysth->bindParam(':invoiceid',$scheduleid);
+		$copysth->bindParam(':linenumber',$linenumber);
+		$copysth->bindParam(':qty',$invqty);
+		$copysth->bindParam(':amount',$invamount);
+		$copysth->bindParam(':partid',$invpartid);
+		$copysth->bindParam(':packageid',$invpackageid);
+		$copysth->bindParam(':serviceid',$invserviceid);
+		$copysth->bindParam(':comment',$databasecomment);
+		$copysth->bindParam(':fet',$fet);
+		$copysth->bindParam(':totallineamount',$extprice);
+		$copysth->bindParam(':lineitem_typeid',$lineitemtype);
+		$copysth->bindParam(':lineitem_subtypeid',$lineitem_subtypeid);
+		$copysth->bindParam(':lineitem_saletype',$lineitem_saletype);
+		$copysth->bindParam(':hours',$hours);
+		$copysth->bindParam(':basecost',$basecost);
+		$copysth->execute()or die(print_r($copysth->errorInfo(), true));
+	}
+	header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
 }
-}
-if($vehicleid > '0')
-{
-$getvehicle = $pdocxn->prepare('SELECT `year`,`make`,`model`,`description`,`cfdescription` from `vehicles` WHERE `id` = :vehicleid');
-$getvehicle->bindParam(':vehicleid',$vehicleid);
-$getvehicle->execute();
-while($getvehiclerow = $getvehicle->fetch(PDO::FETCH_ASSOC))
-{
-$year = $getvehiclerow['year'];
-$make = $getvehiclerow['make'];
-$model = $getvehiclerow['model'];
-if($year > '0')
-{
-	$abvvehicle = $year." ".$make." ".$model;
-}else{
-$abvvehicle = $getvehiclerow['description'];
-}
-if($abvvehicle < '1')
-{
-$abvvehicle = $getvehiclerow['cfdescription'];
-}}
-}
-else{
-	$abvvehicle = '';
-}
-
-$sth2 = $pdocxn->prepare('INSERT INTO `'.$locschedule.'`(`id`,`date`,`userid`,`type`,`location`,`creationdate`,`invoicedate`,`taxgroup`,`accountid`,`vehicleid`,`mileagein`,`mileageout`,`length`,`abvname`,`abvvehicle`,`schedule`) VALUES (:id,:date,:userid,:typeid,:location,:creationdate,:invoicedate,:taxgroup,:accountid,:vehicleid,:mileagein,:mileageout,:length,:abvname,:abvvehicle,:schedule)');
-$sth2->bindParam(':id',$scheduleid);
-$sth2->bindParam(':date',$newdate);
-$sth2->bindParam(':userid',$currentid);
-$sth2->bindParam(':typeid',$typeid);
-$sth2->bindParam(':location',$location);
-$sth2->bindParam(':creationdate',$currentdate);
-$sth2->bindParam(':invoicedate',$newdate);
-$sth2->bindParam(':taxgroup',$taxgroup);
-$sth2->bindParam(':accountid',$accountid);
-$sth2->bindParam(':vehicleid',$vehicleid);
-$sth2->bindParam(':mileagein',$mileagein);
-$sth2->bindParam(':mileageout',$mileageout);
-$sth2->bindParam(':length',$length);
-$sth2->bindParam(':abvname',$abvname);
-$sth2->bindParam(':abvvehicle',$abvvehicle);
-$sth2->bindParam(':schedule',$schedule);
-$sth2->execute()or die(print_r($sth2->errorInfo(), true));
-
-
-
-$sth4 = $pdocxn->prepare('SELECT * FROM `line_items` WHERE `invoiceid` = :inv ORDER BY `linenumber` ASC');
-$sth4->bindParam(':inv',$invoiceid);
-$sth4->execute()or die(print_r($sth4->errorInfo(), true));
-$linecount = $sth4->rowCount();
-	while($row4 = $sth4->fetch(PDO::FETCH_ASSOC))
-{
-$lineitemtype = $row4['lineitem_typeid'];
-$lineid = $row4['id'];
-$invqty = $row4['qty'];
-$invamount = $row4['amount'];
-$invpartid = $row4['partid'];
-$invpackageid = $row4['packageid'];
-$invserviceid = $row4['serviceid'];
-$databasecomment = $row4['comment'];
-$fet = $row4['fet'];
-$extprice = $row4['totallineamount'];
-$linenumber = $row4['linenumber'];
-$lineitem_subtypeid = $row4['lineitem_subtypeid'];
-$lineitem_saletype = $row4['lineitem_saletype'];
-
-
-
-$copysql = 'INSERT INTO `'.$lischedule.'`(`invoiceid`,`linenumber`,`qty`,`amount`,`partid`,`packageid`,`serviceid`,`comment`,`fet`,`totallineamount`,`lineitem_typeid`,`lineitem_subtypeid`,`lineitem_saletype`,`hours`,`basecost`) VALUES (:invoiceid,:linenumber,:qty,:amount,:partid,:packageid,:serviceid,:comment,:fet,:totallineamount,:lineitem_typeid,:lineitem_subtypeid,:lineitem_saletype,:hours,:basecost)';
-
-$copysth = $pdocxn->prepare($copysql);
-$copysth->bindParam(':invoiceid',$scheduleid);
-$copysth->bindParam(':linenumber',$linenumber);
-$copysth->bindParam(':qty',$invqty);
-$copysth->bindParam(':amount',$invamount);
-$copysth->bindParam(':partid',$invpartid);
-$copysth->bindParam(':packageid',$invpackageid);
-$copysth->bindParam(':serviceid',$invserviceid);
-$copysth->bindParam(':comment',$databasecomment);
-$copysth->bindParam(':fet',$fet);
-$copysth->bindParam(':totallineamount',$extprice);
-$copysth->bindParam(':lineitem_typeid',$lineitemtype);
-$copysth->bindParam(':lineitem_subtypeid',$lineitem_subtypeid);
-$copysth->bindParam(':lineitem_saletype',$lineitem_saletype);
-$copysth->bindParam(':hours',$hours);
-$copysth->bindParam(':basecost',$basecost);
-$copysth->execute()or die(print_r($copysth->errorInfo(), true));
-}
-
-header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
-}
-
-
 	if($change == '2')
 {
-	//change time
-$newdate = $_GET['newtime'];
-$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `date`=:newdate,`schedule`=:schedule,`voiddate` = NULL WHERE `id` = :invoiceid');
-$sth1->bindParam(':newdate',$newdate);
-$sth1->bindParam(':schedule',$schedule);
-$sth1->bindParam(':invoiceid',$transactionid);
-$sth1->execute();
-
-
-$sth2 = $pdocxn->prepare('DELETE FROM `'.$locschedule.'` WHERE `thread` = :inv');
-$sth2->bindParam(':inv',$transactionid);
-$sth2->execute();
-
-
-$reallength = '1';
-$lengtherror = '0';
-$sth3 = $pdocxn->prepare('SELECT `id`,`date`,`invoicedate`,`length`,`accountid` FROM `'.$locschedule.'` WHERE id = :inv');
-$sth3->bindParam(':inv',$transactionid);
-$sth3->execute();
-$row3 = $sth3->fetch(PDO::FETCH_ASSOC);
-$currentinvoicedate = $row3['date'];
-$appointmentday = $row3['invoicedate'];
-$checklength = $row3['length'];
-$accountid = $row3['accountid'];
-$minute = '30';
-	//see if the following appts are filled
-while($checklength >'1')
-	{
-	$searchtime = date('Y-m-d H:i:s', strtotime('+'.$minute.' minute', strtotime($currentinvoicedate)));
-	$checknoon = date('H',strtotime($searchtime));
-	if($checknoon == '12')
-	{
-		$searchtime = date('Y-m-d H:i:s', strtotime('+1 hour', strtotime($searchtime)));
-	}
-	$sql2 = 'SELECT `id` FROM `'.$locschedule.'` WHERE `date` = \''.$searchtime.'\' AND `schedule` = \''.$schedule.'\' AND `voiddate` IS NULL';
-	$sth2 = $pdocxn->prepare($sql2);
+	$newdate = $_GET['newtime'];
+	$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `date`=:newdate,`schedule`=:schedule,`voiddate` = NULL WHERE `id` = :invoiceid');
+	$sth1->bindParam(':newdate',$newdate);
+	$sth1->bindParam(':schedule',$schedule);
+	$sth1->bindParam(':invoiceid',$transactionid);
+	$sth1->execute();
+	$sth2 = $pdocxn->prepare('DELETE FROM `'.$locschedule.'` WHERE `thread` = :inv');
+	$sth2->bindParam(':inv',$transactionid);
 	$sth2->execute();
-	$nrows = $sth2->rowCount();
-	if ($nrows =='2')
-	{
-		$lengtherror = '1';
-		break;
-	}
-	else {
-		$fillertype = '54';
-$sql2 = 'INSERT INTO `'.$locschedule.'` (`date`,`thread`,`type`,`location`,`invoicedate`,`accountid`,`schedule`) VALUES (:date,:thread,:type,:location,:invoicedate,:accountid,:schedule)';
-$sth2 = $pdocxn->prepare($sql2);
-$sth2->bindParam(':date',$searchtime);
-$sth2->bindParam(':thread',$transactionid);
-$sth2->bindParam(':type',$fillertype);
-$sth2->bindParam(':location',$currentlocationid);
-$sth2->bindParam(':invoicedate',$appointmentday);
-$sth2->bindParam(':accountid',$accountid);
-$sth2->bindParam(':schedule',$schedule);
-$sth2->execute()or die(print_r($sth2->errorInfo(), true));
-	}
-	$checklength --;
-	$reallength ++;
-	$currentinvoicedate = $searchtime;
-	}
-	//fill them with a thread filler // my only problem is this fills up the database 
-	//solution delete the threads that are old -- implement
-	
-	$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `length`=:length WHERE `id` = :invoiceid');
-$sth1->bindParam(':length',$reallength);
-$sth1->bindParam(':invoiceid',$transactionid);
-$sth1->execute();
-header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
-	}
+	$reallength = '1';
+	$lengtherror = '0';
+	$sth3 = $pdocxn->prepare('SELECT `id`,`date`,`invoicedate`,`length`,`accountid` FROM `'.$locschedule.'` WHERE id = :inv');
+	$sth3->bindParam(':inv',$transactionid);
+	$sth3->execute();
+	$row3 = $sth3->fetch(PDO::FETCH_ASSOC);
+	$currentinvoicedate = $row3['date'];
+	$appointmentday = $row3['invoicedate'];
+	$checklength = $row3['length'];
+	$accountid = $row3['accountid'];
+	$minute = '30';
+		//see if the following appts are filled
+	while($checklength >'1')
+		{
+			$searchtime = date('Y-m-d H:i:s', strtotime('+'.$minute.' minute', strtotime($currentinvoicedate)));
+			$checknoon = date('H',strtotime($searchtime));
+			if($checknoon === '12')
+			{
+				$searchtime = date('Y-m-d H:i:s', strtotime('+1 hour', strtotime($searchtime)));
+			}
+			$sql2 = 'SELECT `id` FROM `'.$locschedule.'` WHERE `date` = \''.$searchtime.'\' AND `schedule` = \''.$schedule.'\' AND `voiddate` IS NULL';
+			$sth2 = $pdocxn->prepare($sql2);
+			$sth2->execute();
+			$nrows = $sth2->rowCount();
+			if ($nrows === '2')
+			{
+				$lengtherror = '1';
+				break;
+			}
+			else {
+				$fillertype = '54';
+				$sql2 = 'INSERT INTO `'.$locschedule.'` (`date`,`thread`,`type`,`location`,`invoicedate`,`accountid`,`schedule`) VALUES (:date,:thread,:type,:location,:invoicedate,:accountid,:schedule)';
+				$sth2 = $pdocxn->prepare($sql2);
+				$sth2->bindParam(':date',$searchtime);
+				$sth2->bindParam(':thread',$transactionid);
+				$sth2->bindParam(':type',$fillertype);
+				$sth2->bindParam(':location',$currentlocationid);
+				$sth2->bindParam(':invoicedate',$appointmentday);
+				$sth2->bindParam(':accountid',$accountid);
+				$sth2->bindParam(':schedule',$schedule);
+				$sth2->execute()or die(print_r($sth2->errorInfo(), true));
+			}
+			$checklength --;
+			$reallength ++;
+			$currentinvoicedate = $searchtime;
+		}
+		//fill them with a thread filler // my only problem is this fills up the database 
+		//solution delete the threads that are old -- implement
+		
+		$sth1 = $pdocxn->prepare('UPDATE `'.$locschedule.'` SET `length`=:length WHERE `id` = :invoiceid');
+		$sth1->bindParam(':length',$reallength);
+		$sth1->bindParam(':invoiceid',$transactionid);
+		$sth1->execute();
+		header('location:schedule.php?r='.$r.'&selectedday='.$selectedday.'');
+}
 	?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico" />
+	    <link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico" />
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" >
 	<link rel="stylesheet" type="text/css" href="style/globalstyle.css" >
 	<link rel="stylesheet" type="text/css" href="style/schedulestyle.css" >
 	<meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" />
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="-1">
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-  <meta http-equiv="refresh" content="10;">
-	<title><?php echo $title; ?></title>
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+ 	 <meta http-equiv="refresh" content="10;">
+	<title><?php echo $currenttitle; ?></title>
 	</head>
 	<body>
 	<?php
 	if($transactionid > '1' OR $accountid > '0')
 	{
-	if($currentlocationid == '1')
-	{
-	echo "<div id=\"header\"><font color=\"red\">Scheduling appointment for ".$customername."</font><br /><a href=\"invoice.php\" class=\"no-decoration\"><input type=\"button\" name=\"submit\" class=\"cancel\" Value=\"Cancel\"></a></div>";
-	}
-	else{
-	echo "<div id=\"header2\"><font color=\"red\">Scheduling appointment for ".$customername."</font><br /><a href=\"invoice.php\" class=\"no-decoration\"><input type=\"button\" name=\"submit\" class=\"cancel\" Value=\"Cancel\"></a></div>";
+		if($currentlocationid == '1')
+		{
+		echo "<div id=\"header\"><font color=\"red\">Scheduling appointment for ".$customername."</font><br /><a href=\"invoice.php\" class=\"no-decoration\"><input type=\"button\" name=\"submit\" class=\"cancel\" Value=\"Cancel\"></a></div>";
+		}
+		else{
+		echo "<div id=\"header2\"><font color=\"red\">Scheduling appointment for ".$customername."</font><br /><a href=\"invoice.php\" class=\"no-decoration\"><input type=\"button\" name=\"submit\" class=\"cancel\" Value=\"Cancel\"></a></div>";
 	}}
 	else{
-	if($currentlocationid == '1')
-	{
-	echo "<div id=\"header\">".$headernavigation."</div>";
-	}
-	else{
-	echo "<div id=\"header2\">".$headernavigation."</div>";
-	}}
+		if($currentlocationid == '1')
+		{
+			echo "<div id=\"header\">".$headernavigation."</div>";
+		}
+		else{
+			echo "<div id=\"header2\">".$headernavigation."</div>";
+		}}
 	?>
 	<div id="content">
 	<div id="navigation">
@@ -484,18 +446,11 @@ if($change == '1')
 }
 ?>
 	<a href="month.php?m=<?php echo $selectedmonth."&y=".$selectedyear."&id=".$transactionid."&accountid=".$accountid."&change=".$change; ?>"><?php echo $displaymonth; ?></a><a href="deletedappointments.php">Deleted Appointments</a><a href="recentappointments.php">Last 30 Appointments</a></div>
-	
-	
 	<table class="gradienttable"><tr><th width="5%"></th><th width="5%"></th><th width="10%"></th><th width="10%"></th><th width="25%"></th><th width="15%"></th><th width="10%"></th><th width="10%"></th><th width="10%"></th><th width="10%"></th></tr>
-	
 	<tr height="40"><th width="55" colspan="2" onclick="document.getElementById('prev3').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $prevday3; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="button" <?php if($currentdate == $prevday3){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $prevday3a; ?>&#13;&#10;<?php echo $prevday3b; ?>"></th>
-	
 	<th width="55" onclick="document.getElementById('prev2').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $prevday2; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="button" <?php if($currentdate == $prevday2){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $prevday2a; ?>&#13;&#10;<?php echo $prevday2b; ?>"></th>
-	
-	
 	<th width="55" href="#" onclick="document.getElementById('prev1').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $prevday1; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="button" <?php if($currentdate == $prevday1){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $prevday1a; ?>&#13;&#10;<?php echo $prevday1b; ?>"></th>
-	<th colspan="2" class="graystatus"><center><?php if($currentdate != $selectedday){?><font size="5" color="red"><?php }else{?><font size="5" color="green"><?php }?><?php echo $displayday; ?></font></center></th>
-	
+	<th colspan="2" class="graystatus"><?php if($currentdate != $selectedday){?><font size="5" color="red"><?php }else{?><font size="5" color="green"><?php }?><?php echo $displayday; ?></font></th>
 	<th width="55" onclick="document.getElementById('nextday1').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $nextday1; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="hidden" name="selectedday" value="<?php echo $nextday1; ?>"><input type="button" <?php if($currentdate == $nextday1){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $nextday1a; ?>&#13;&#10;<?php echo $nextday1b; ?>"></th>
 	<th width="55" onclick="document.getElementById('nextday2').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $nextday2; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="hidden" name="selectedday" value="<?php echo $nextday2; ?>"><input type="button" <?php if($currentdate == $nextday2){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $nextday2a; ?>&#13;&#10;<?php echo $nextday2b; ?>"></th>
 	<th width="55" onclick="document.getElementById('nextday3').submit();" class="graystatus"><a href="schedule.php?r=<?php echo $r; ?>&selectedday=<?php echo $nextday3; ?>&accountid=<?php echo $accountid.$displaychange.$displaychange2; ?>"><input type="hidden" name="selectedday" value="<?php echo $nextday3; ?>"><input type="button" <?php if($currentdate == $nextday3){?>class="todaybutton"<?php }else{?>class="calendarbutton"<?php } ?> value="<?php echo $nextday3a; ?>&#13;&#10;<?php echo $nextday3b; ?>"></th>
@@ -704,13 +659,14 @@ echo '<a href="vacation.php?adjid='.$vacationid.'" class="daysum-red">'.$employe
 				echo "</tr><tr height=\"31\"><th class=\"graystatus\">".$displaytime."</th>"; 
 			}
 		}
-		
     }else{
     echo "</tr><tr height=\"31\"><th class=\"graystatus\">".$displaytime."</th>";
 	}}
 	$searchtime1a = date('Y-m-d H:i:s', strtotime('+'.$hour.' hour', strtotime($selectedday)));
 	$searchtime = date('Y-m-d H:i:s', strtotime('+'.$minute.' minute', strtotime($searchtime1a)));
+	//$currentdatetime = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
 	$sql2 = 'SELECT `id`,`length`,`status`,`returntime`,`abvvehicle`,`abvname`,`phone`,`tires`,`lof`,`brakes`,`shocks`,`align`,`engine` FROM `'.$locschedule.'` WHERE `date` = \''.$searchtime.'\' AND `schedule` = \''.$schedule.'\' AND `thread` IS NULL AND `voiddate` IS NULL';
+	
 	$sth2 = $pdocxn->prepare($sql2);
 	$sth2->execute();
 	$nrows = $sth2->rowCount();
@@ -739,7 +695,7 @@ echo '<a href="vacation.php?adjid='.$vacationid.'" class="daysum-red">'.$employe
 		$align = $row2['align'];
 		$engine = $row2['engine'];
 		
-		//get display icons
+		//get the icons
 	if($brakes == '1')
 	{
 		$brakeicon = "<img src=\"images/icons/schedule/brake_icon.png\" width=\"25\">";
@@ -760,7 +716,7 @@ echo '<a href="vacation.php?adjid='.$vacationid.'" class="daysum-red">'.$employe
 	{	$engineicon = "<img src=\"images/icons/schedule/engine_icon.png\" width=\"25\">";
 	}else{$engineicon = '';}
 		$displayicons = $tireicon.$brakeicon.$oilicon.$shockicon.$alignicon.$engineicon;
-	//get vehicle status
+	// get the status
 		if($currentstatus == '1')
 		{
 			$statuscolor = 'graystatus';
@@ -803,11 +759,10 @@ if($currentstatus < '10')
 {
 echo "<a href=\"invoice.php?scheduleid=".$scheduleid."&loc=".$currentlocationid."\"><img src=\"images/icons/scheduledollar.png\" width=\"25\"></a>";
 }
-echo "<a href=\"appointment.php?schedule=1&invoiceid=".$scheduleid."\" target=\"_BLANK\"><input type=\"button\" class=\"btn-style\" value=\"".$displayinfo."\">&nbsp;".$displayicons."</a><a href=\"schedule.php?r=".$r."&selectedday=".$selectedday."&id=".$scheduleid."&change=1\">&nbsp;&nbsp;&nbsp;<img src=\"images/icons/schedulechange.png\" width=\"25\"></a><a href=\"schedule.php?r=".$r."&id=".$scheduleid."&delete=1&selectedday=".$selectedday."&locid=1\" onclick=\"return confirm('Delete this Appointment?')\">&nbsp;<img src=\"images/icons/scheduledelete.png\" width=\"25\"></a></th>";
+echo "<a href=\"appointment.php?schedule=1&invoiceid=".$scheduleid."\" target=\"_BLANK\"><input type=\"button\" class=\"btn-style\" value=\"".$displayinfo."\">&nbsp;".$displayicons."</a><a href=\"schedule.php?r=".$r."&selectedday=".$selectedday."&id=".$scheduleid."&change=1\">&nbsp;&nbsp;&nbsp;<img src=\"images/icons/schedulechange.png\" width=\"25\"></a><a href=\"schedule.php?r=".$r."&id=".$scheduleid."&delete=1&locid=1\" onclick=\"return confirm('Delete this Appointment?')\">&nbsp;<img src=\"images/icons/scheduledelete.png\" width=\"25\"></a></th>";
 	$tr ++;
 	if($nrows == '1')
 	{
-		//find service bay to displayin
 			if($bay1 > '0' && $bay2 > '0')
 		{}else{
 if($change == '1' OR $invtosched == '1')
@@ -876,9 +831,9 @@ else {
 	$bay1 --;
 	$bay2 --;
 	}
-	//display day recap
 	?>
 	</tr></table><br />
+
 <table id="highlightTable" class="blueTable">
 <thead>
 <tr><th colspan="4">Inventory Checklist - Tires going on Today:</th></tr>
@@ -910,15 +865,13 @@ $checkpartid = $row4['partid'];
 $schedqty = $row4['qty'];
 if($checkpartid > '1')
 {
-//check and verify tires are in stock
+
 	$sth1 = $pdocxn->prepare('SELECT * FROM `inventory` WHERE `id` = :cpartid LIMIT 1'); 
 	$sth1->bindParam(':cpartid',$checkpartid);
 	$sth1->execute();
 		while($row1 = $sth1->fetch(PDO::FETCH_ASSOC))
 	{
 		$articleid = $row1['part_number'];
-		$type = $row1['type'];
-		$recordinventory = $row1['record'];
 		$brandid = $row1['manid'];
 		$model = $row1['model'];
 		$mileage = $row1['warranty'];
@@ -988,7 +941,7 @@ $query2 = mysqli_query($sqlicxn,$sql2);
 while ($row2 = mysqli_fetch_assoc($query2))
 	{
 	$brand = $row2['brand'];
-	$description = $articleid.", ".$size." ".$brand." ".$model." ".$load_index.$speed." ".$displayply;
+	$description = $articleid.", ".$size." ".$brand." ".$model." ".$load_index.$speed." ";
 	}
 	if($currentcheckstatus == '10')
 	{
@@ -1002,6 +955,4 @@ while ($row2 = mysqli_fetch_assoc($query2))
 	}}}}}}
 		?>
 	</table>
-
 	</body></html>
-
